@@ -1,3 +1,20 @@
+:root{
+  --bg:#0a0f14;
+  --panel:#10161d;
+  --muted:#15202b;
+  --text:#e6edf3;
+  --sub:#9fb0c2;
+  --brand:#4ea1ff;
+}
+html, body { background: var(--bg); color: var(--text); }
+.bg-panel{ background: var(--panel); }
+.bg-muted{ background: var(--muted); }
+.text-sub{ color: var(--sub); }
+.text-brand{ color: var(--brand); }
+.border-muted{ border-color: color-mix(in oklab, var(--muted), #ffffff 12%); }
+.shadow-soft{ box-shadow: 0 6px 24px rgba(0,0,0,.25); }
+
+/* Tailwind layers */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
