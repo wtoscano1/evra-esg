@@ -31,7 +31,7 @@ export default function ESGEvraSite() {
         kicker: "ESG • Circular • Traceable",
         title: "ESG Evra",
         subtitle:
-          "Circular food systems: direct sourcing, traceability, and low-carbon operations across Monti • Mare • Farina.",
+          "Circular food systems: direct sourcing, traceability, and low-carbon logistics from acquistion to salt.",
         cta1: "Request Deck",
         cta2: "Partner With Us",
       },
@@ -467,14 +467,31 @@ export default function ESGEvraSite() {
       <Section id="contact" title={t.contact.title} blurb={t.contact.blurb}>
         <form
           className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4 bg-panel p-6 rounded-2xl border border-muted shadow-soft"
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
-            alert("Thanks. Connect this to your email/CRM.");
+            const form = e.currentTarget;
+            const data = {
+              name: form.elements['name'].value.trim(),
+              email: form.elements['email'].value.trim(),
+              message: form.elements['message'].value.trim(),
+              honeypot: form.elements['company']?.value || '',  
+            };
+
+            const r = await fetch('/api/contact', {
+             method: 'POST',
+             headers: { 'Content-Type': 'application/json' },
+             body: JSON.stringify(data),
+            });
+
+            const j = await r.json();
+            if (j.ok) { alert('Thank you. We will reply shortly.'); form.reset(); }
+            else { alert('Error sending message. Please try again.'); }
           }}
-        >
+          >
           <label className="block">
             <span className="text-sm">{t.contact.fields.name}</span>
             <input
+              name="name"
               required
               className="mt-1 w-full rounded-xl border border-muted bg-[var(--bg)] text-[var(--text)] px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--brand)]/30"
               placeholder="Jane Doe"
@@ -483,15 +500,25 @@ export default function ESGEvraSite() {
           <label className="block">
             <span className="text-sm">{t.contact.fields.email}</span>
             <input
+              name="email"
               type="email"
               required
               className="mt-1 w-full rounded-xl border border-muted bg-[var(--bg)] text-[var(--text)] px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--brand)]/30"
               placeholder="jane@domain.com"
             />
+            <input
+              type="text"
+              name="company"
+              className="hidden"
+              tabIndex="-1"
+              autoComplete="off"
+            />
+
           </label>
           <label className="block sm:col-span-2">
             <span className="text-sm">{t.contact.fields.msg}</span>
             <textarea
+              name="message"
               required
               rows={5}
               className="mt-1 w-full rounded-xl border border-muted bg-[var(--bg)] text-[var(--text)] px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--brand)]/30"
