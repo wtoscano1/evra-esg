@@ -1,4 +1,4 @@
-// api/contact.mjs  (ESM)
+// api/contact.js  (ESM)
 import nodemailer from 'nodemailer';
 
 function readJson(req) {

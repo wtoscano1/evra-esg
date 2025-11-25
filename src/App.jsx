@@ -236,7 +236,7 @@ export default function ESGEvraSite() {
 
   // ── documents manifest ─────────────────────────────────────────────────────
   const docsManifest = [
-    { title: "Investor Deck (PDF)", path: "/deck/ESG_Evra_Investor_Deck.pdf", type: "PDF", lang: "EN", date: "2025-11-07" },
+    { title: "Investor Deck (PDF)", path: "/deck/EVRA-Investor-Pitch-Deck.pdf", type: "PDF", lang: "EN", date: "2025-11-07" },
     { title: "Executive Summary", path: "/docs/Executive_Summary_EN.pdf", type: "PDF", lang: "EN", date: "2025-11-07" },
     { title: "Synthèse Exécutive", path: "/docs/Resume_Executif_FR.pdf", type: "PDF", lang: "FR", date: "2025-11-07" },
     { title: "Sintesi Esecutiva", path: "/docs/Sintesi_Esecutiva_IT.pdf", type: "PDF", lang: "IT", date: "2025-11-07" },
