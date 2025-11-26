@@ -242,7 +242,7 @@ export default function ESGEvraSite() {
     { title: "Sintesi Esecutiva", path: "/deck/Sintesi_Esecutiva_IT.pdf", type: "PDF", lang: "IT", date: "2025-11-07" },
     { title: "Business Plan", path: "/docs/Business_Plan_ESG_Evra.docx", type: "DOCX", lang: "EN", date: "2025-11-07" },
     { title: "Financial Model", path: "/docs/Financial_Model.xlsx", type: "XLSX", lang: "EN", date: "2025-11-07" },
-    { title: "Product Catalog (RTE)", path: "/deck/Product_Catalog.pdf", type: "PDF", lang: "EN", date: "2025-11-07" },
+    { title: "Product Catalog", path: "/deck/Product_Catalog.pdf", type: "PDF", lang: "EN", date: "2025-11-07" },
   ];
 
   const filteredDocs = docsManifest.filter(
