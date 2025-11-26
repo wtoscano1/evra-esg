@@ -634,6 +634,22 @@ function StatCard({ h, p }) {
   );
 }
 
+function BrandCard({ name, tagline, img }) {
+  return (
+    <div className="rounded-2xl border border-neutral-200 bg-white shadow-sm hover:shadow-md transition-shadow p-6 flex flex-col items-center text-center">
+      <div className="h-16 w-16 rounded-2xl bg-neutral-100 flex items-center justify-center overflow-hidden">
+        <img
+          src={img}
+          alt={name}
+          className="h-12 w-12 object-contain"
+        />
+      </div>
+      <h3 className="mt-4 font-semibold">{name}</h3>
+      <p className="mt-2 text-sm text-neutral-700">{tagline}</p>
+    </div>
+  );
+}
+
 function Select({ label, value, onChange, options }) {
   return (
     <label className="text-sm inline-flex items-center gap-2">
