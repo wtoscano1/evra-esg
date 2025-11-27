@@ -5,6 +5,43 @@ export default function ESGEvraSite() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [shadow, setShadow] = useState(false);
   const [docFilter, setDocFilter] = useState({ type: "ALL", lang: "ALL" });
+  const [activeProject, setActiveProject] = useState(null);
+
+  const projectDetails = {
+    monti: {
+      title: "Monti – Wood-Fire Meats",
+      description:
+        "Monti is our flagship wood-fire meat concept in central Geneva, focusing on traceable Italian beef, long-aged cuts, and a compact, high-impact dining room.",
+      menuUrl: "/docs/monti-menu.pdf",
+      images: [
+        "/images/projects/monti-mise-en-place.jpg",
+        "/images/projects/monti-uniforms.jpg",
+        "/images/projects/monti-interior.jpg",
+      ],
+    },
+    mare: {
+      title: "Mare – Mediterranean Seafood",
+      description:
+        "Mare is built around Italian and Mediterranean seafood with optimized cold-chain logistics and a raw bar designed for speed and precision.",
+      menuUrl: "/docs/mare-menu.pdf",
+      images: [
+        "/images/projects/mare-mise-en-place.jpg",
+        "/images/projects/mare-uniforms.jpg",
+        "/images/projects/mare-interior.jpg",
+      ],
+    },
+    farina: {
+      title: "Farina – Slow-Rise Pizza & Pasta",
+      description:
+        "Farina focuses on slow-fermented doughs and single-origin Italian grains, with a menu designed to travel well for takeaway and delivery.",
+      menuUrl: "/docs/farina-menu.pdf",
+      images: [
+        "/images/projects/farina-mise-en-place.jpg",
+        "/images/projects/farina-uniforms.jpg",
+        "/images/projects/farina-interior.jpg",
+      ],
+    },
+  };
 
   useEffect(() => {
     const onScroll = () => setShadow(window.scrollY > 8);
@@ -347,7 +384,7 @@ export default function ESGEvraSite() {
       {/* Profile */}
       <Section id="profile" title={t.profile.title} blurb={t.profile.blurb}>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <StatCard h="Direct Producers" p="20+ core partners across Tuscany & Umbria" />
+          <StatCard h="Direct Producers" p="20+ core partners across Italy." />
           <StatCard h="Traceable SKUs" p="100% item-level QR by go-live" />
           <StatCard h="Waste" p=">15% reduction target in year 1" />
         </div>
@@ -422,13 +459,27 @@ export default function ESGEvraSite() {
       {/* Projects */}
       <Section id="projects" title={t.projects.title}>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {t.projects.cards.map((c, i) => (
-            <div key={i} className="rounded-2xl border border-muted p-6 bg-panel shadow-soft hover:shadow-lg transition">
-              <div className="text-xs uppercase tracking-widest text-sub">{c.tag}</div>
-              <h3 className="mt-2 font-semibold">{c.h}</h3>
-              <p className="mt-2 text-sm text-sub">{c.p}</p>
-            </div>
-          ))}
+          {t.projects.cards.map((c, i) => {
+            const slug = c.h.toLowerCase(); // "Monti" -> "monti", etc.
+
+            return (
+              <button
+                key={i}
+                type="button"
+                onClick={() => setActiveProject(slug)}
+                className="text-left rounded-2xl border border-muted p-6 bg-panel shadow-soft hover:shadow-lg transition focus:outline-none focus:ring-2 focus:ring-[var(--brand)]/40"
+              >
+                <div className="text-xs uppercase tracking-widest text-sub">
+                  {c.tag}
+                </div>
+                <h3 className="mt-2 font-semibold text-[var(--text)]">{c.h}</h3>
+                <p className="mt-2 text-sm text-sub">{c.p}</p>
+                <div className="mt-4 text-xs text-brand underline">
+                  View concept details
+                </div>
+              </button>
+            );
+          })}
         </div>
       </Section>
 
@@ -613,6 +664,14 @@ export default function ESGEvraSite() {
           </div>
         </div>
       </section>
+      
+      {/* Project modal */}
+      {activeProject && (
+        <ProjectModal
+          project={projectDetails[activeProject]}
+          onClose={() => setActiveProject(null)}
+        />
+      )}
 
       {/* Footer */}
       <footer className="border-t border-muted bg-panel">
@@ -731,6 +790,66 @@ function DocsTable({ files }) {
           ))}
         </tbody>
       </table>
+    </div>
+  );
+}
+
+function ProjectModal({ project, onClose }) {
+  if (!project) return null;
+
+  return (
+    <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/60 px-4">
+      <div className="relative w-full max-w-3xl rounded-2xl bg-panel border border-muted shadow-soft max-h-[90vh] overflow-y-auto">
+        {/* Close button */}
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute right-3 top-3 rounded-full bg-black/40 text-sub hover:text-white px-2 py-1 text-xs"
+        >
+          ✕
+        </button>
+
+        <div className="p-6 space-y-4">
+          <div className="space-y-1">
+            <h3 className="text-2xl font-semibold text-[var(--text)]">
+              {project.title}
+            </h3>
+            {project.description && (
+              <p className="text-sm text-sub">{project.description}</p>
+            )}
+          </div>
+
+          {project.menuUrl && (
+            <div>
+              <a
+                href={project.menuUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-xl bg-[var(--brand)] text-black px-4 py-2 text-sm hover:opacity-90"
+              >
+                Open Menu (PDF)
+              </a>
+            </div>
+          )}
+
+          {project.images && project.images.length > 0 && (
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+              {project.images.map((src, idx) => (
+                <div
+                  key={idx}
+                  className="overflow-hidden rounded-xl border border-muted bg-muted"
+                >
+                  <img
+                    src={src}
+                    alt={`${project.title} visual ${idx + 1}`}
+                    className="h-32 w-full object-cover sm:h-40"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
