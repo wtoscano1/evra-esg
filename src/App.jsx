@@ -69,8 +69,16 @@ export default function ESGEvraSite() {
       org: {
         title: "Organization",
         people: [
-          { name: "William Toscano", role: "Operations", note: "Beverly Hills fine-dining GM; end-to-end ops." },
-          { name: "David Toscano", role: "Sourcing & ESG", note: "Direct network of Italian producers." },
+          { name: "William Toscano", 
+            role: "Operations", 
+            note: "Beverly Hills fine-dining GM; end-to-end ops.",
+            img: "/images/people/william.png" 
+          },
+          { name: "David Toscano", 
+            role: "Sourcing & ESG", 
+            note: "Direct network of Italian producers.",
+            img: "/images/people/david.png" 
+          },
         ],
       },
       clients: {
@@ -96,7 +104,7 @@ export default function ESGEvraSite() {
       },
       docs: {
         title: "Documents",
-        hint: "Place files in /public/docs or /public/deck.",
+        hint: "Download key documents or request additional material.",
         filters: { type: "Type", lang: "Language", all: "All" },
       },
       contact: {
@@ -377,10 +385,23 @@ export default function ESGEvraSite() {
           {t.org.people.map((p, i) => (
             <div key={i} className="rounded-2xl border border-muted p-6 bg-panel shadow-soft hover:shadow-lg transition">
               <div className="flex items-center gap-4">
-                <div className="h-12 w-12 rounded-full bg-muted" aria-hidden />
+                {p.img ? (
+                  <div className="avatar-hex-frame h-14 w-14">
+                    <img
+                      src={p.img}
+                      alt={p.name}
+                      className="h-14 w-14 avatar-hex object-cover"
+                    />
+                  </div>
+                ) : (
+                  <div className="avatar-hex-frame h-14 w-14">
+                   <div className="h-12 w-12 rounded-full bg-neutral-200" aria-hidden />
+                  </div>
+                )}
+
                 <div>
                   <div className="font-semibold">{p.name}</div>
-                  <div className="text-sm text-sub">{p.role}</div>
+                  <div className="text-sm text-neutral-600">{p.role}</div>
                 </div>
               </div>
               <p className="mt-3 text-sm text-sub">{p.note}</p>
