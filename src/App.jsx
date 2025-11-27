@@ -420,28 +420,6 @@ export default function ESGEvraSite() {
         </ul>
       </Section>
 
-      {/* Brands */}
-      <Section id="brands" title="Brands">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 items-stretch">
-          <BrandCard
-            name="Monti"
-            tagline="Wood-fire meats • Geneva"
-            img="/brands/monti.png"
-          />
-          <BrandCard
-            name="Mare"
-            tagline="Mediterranean seafood • Cold chain optimized"
-            img="/brands/mare.png"
-          />
-          <BrandCard
-            name="Farina"
-            tagline="Slow-rise pizza & pasta • Grain provenance"
-            img="/brands/farina.png"
-          />
-        </div>
-      </Section>
-
-
       {/* Documents with filters */}
       <Section id="documents" title={t.docs.title} blurb={t.docs.hint}>
         <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
@@ -487,7 +465,7 @@ export default function ESGEvraSite() {
                 className="h-40 w-auto object-contain"
               />
               <span className="text-sm text-neutral-700">
-                 Monti — Wood-fire grilled meats
+                 Monti — Wood-fire grilled meats for dinner; Gourmet sandwiches for lunch
               </span>
             </div>
 
