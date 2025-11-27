@@ -465,26 +465,60 @@ export default function ESGEvraSite() {
         <DocsTable files={filteredDocs} />
       </Section>
 
-      {/* Brands visual strip (optional) */}
-      <section id="brands" className="py-14">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-semibold">Brands</h2>
-          <p className="text-sub text-sm mt-1">Monti • Mare • Farina</p>
-          <ul className="mt-8 grid gap-4 sm:grid-cols-3">
-            {[
-              { n: "Monti", img: "/images/monti.webp" },
-              { n: "Mare", img: "/images/mare.webp" },
-              { n: "Farina", img: "/images/farina.webp" },
-            ].map((b) => (
-              <li key={b.n} className="relative rounded-2xl overflow-hidden bg-muted group">
-                <img src={b.img} alt="" className="h-48 w-full object-cover opacity-85 group-hover:opacity-100 transition" />
-                <div className="absolute inset-0 bg-black/15" />
-                <div className="absolute bottom-3 left-3 text-lg font-semibold">{b.n}</div>
-              </li>
-            ))}
-          </ul>
+      {/* Brands / Concepts */}
+      <section id="brands" className="bg-[var(--bg)]">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
+          <div className="flex items-baseline justify-between gap-4">
+            <h2 className="text-2xl font-bold tracking-tight">Brands</h2>
+            <div className="hidden md:block h-px flex-1 bg-gradient-to-r from-neutral-200 to-transparent" />
+          </div>
+
+          <p className="mt-2 text-neutral-700 max-w-3xl">
+            Monti, Mare, and Farina operate as a unified circular system for sourcing, logistics, and traceability.
+          </p>
+
+          <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-10 items-center">
+
+            {/* Monti */}
+            <div className="flex flex-col items-center gap-3">
+              <img
+                src="/images/brands/monti.png"
+                alt="Monti Logo"
+                className="h-40 w-auto object-contain"
+              />
+              <span className="text-sm text-neutral-700">
+                 Monti — Wood-fire grilled meats
+              </span>
+            </div>
+
+            {/* Mare */}
+             <div className="flex flex-col items-center gap-3">
+              <img
+                 src="/images/brands/mare.png"
+                 alt="Mare Logo"
+                 className="h-40 w-auto object-contain"
+              />
+              <span className="text-sm text-neutral-700">
+                 Mare — Mediterranean seafood
+              </span>
+             </div>
+
+            {/* Farina */}
+             <div className="flex flex-col items-center gap-3">
+              <img
+                 src="/images/brands/farina.png"
+                 alt="Farina Logo"
+                 className="h-40 w-auto object-contain"
+              />
+              <span className="text-sm text-neutral-700">
+                 Farina — Slow-fermented pizza & pasta
+              </span>
+             </div>
+
+          </div>
         </div>
       </section>
+
 
       {/* Contact */}
       <Section id="contact" title={t.contact.title} blurb={t.contact.blurb}>
