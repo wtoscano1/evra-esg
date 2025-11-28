@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Modal from "./components/Modal";
 
 export default function ESGEvraSite() {
   const [lang, setLang] = useState("en");
@@ -6,6 +7,7 @@ export default function ESGEvraSite() {
   const [shadow, setShadow] = useState(false);
   const [docFilter, setDocFilter] = useState({ type: "ALL", lang: "ALL" });
   const [activeProject, setActiveProject] = useState(null);
+  const [modalMonti, setModalMonti] = useState(false);
 
   const projectDetails = {
     monti: {
@@ -459,29 +461,58 @@ export default function ESGEvraSite() {
       {/* Projects */}
       <Section id="projects" title={t.projects.title}>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {t.projects.cards.map((c, i) => {
-            const slug = c.h.toLowerCase(); // "Monti" -> "monti", etc.
+          {t.projects.cards.map((c, i) => (
+            <div
+              key={i}
+              className="rounded-2xl border border-muted p-6 bg-panel shadow-soft hover:shadow-lg transition"
+            >
+              <div className="text-xs uppercase tracking-widest text-sub">{c.tag}</div>
+              <h3 className="mt-2 font-semibold">{c.h}</h3>
+              <p className="mt-2 text-sm text-sub">{c.p}</p>
 
-            return (
-              <button
-                key={i}
-                type="button"
-                onClick={() => setActiveProject(slug)}
-                className="text-left rounded-2xl border border-muted p-6 bg-panel shadow-soft hover:shadow-lg transition focus:outline-none focus:ring-2 focus:ring-[var(--brand)]/40"
-              >
-                <div className="text-xs uppercase tracking-widest text-sub">
-                  {c.tag}
-                </div>
-                <h3 className="mt-2 font-semibold text-[var(--text)]">{c.h}</h3>
-                <p className="mt-2 text-sm text-sub">{c.p}</p>
-                <div className="mt-4 text-xs text-brand underline">
-                  View concept details
-                </div>
-              </button>
-            );
-          })}
+              {c.h === "Monti" && (
+                <button
+                  onClick={() => setModalMonti(true)}
+                  className="mt-4 px-4 py-2 rounded-lg bg-brand text-black font-medium hover:opacity-90"
+                >
+                  View Details
+                </button>
+              )}
+            </div>
+          ))}
         </div>
       </Section>
+      
+      {/* Monti Modal */}
+      <Modal
+        open={modalMonti}
+        onClose={() => setModalMonti(false)}
+        title="Monti — Project Details"
+      >
+        <p className="text-sub">Menus, images, and visual assets for Monti.</p>
+
+        <h3 className="mt-4 font-semibold">Menu (PDF)</h3>
+        <a
+          className="underline text-brand"
+          href="/images/monti/menu-monti.png"
+          target="_blank"
+        >
+          Download Menu
+        </a>
+
+        <h3 className="mt-4 font-semibold">Mise en Place</h3>
+        <div className="grid grid-cols-2 gap-4">
+          <img src="/images/monti/mise.png" className="rounded-xl" />
+        </div>
+
+        <h3 className="mt-4 font-semibold">Uniforms</h3>
+        <img src="/images/monti/uniforms.jpg" className="rounded-xl w-full" />
+
+        <h3 className="mt-4 font-semibold">Interior Design</h3>
+        <div className="grid grid-cols-2 gap-4">
+          <img src="/images/monti/interior.png" className="rounded-xl" />
+        </div>
+      </Modal>
 
       {/* Expansion & KPIs */}
       <Section id="geo" title={t.geo.title}>
@@ -514,6 +545,7 @@ export default function ESGEvraSite() {
         <div className="mt-6" />
         <DocsTable files={filteredDocs} />
       </Section>
+
 
       {/* Brands / Concepts */}
       <section id="brands" className="bg-[var(--bg)]">
