@@ -7,7 +7,10 @@ export default function ESGEvraSite() {
   const [shadow, setShadow] = useState(false);
   const [docFilter, setDocFilter] = useState({ type: "ALL", lang: "ALL" });
   const [activeProject, setActiveProject] = useState(null);
+
   const [modalMonti, setModalMonti] = useState(false);
+  const [modalMare, setModalMare] = useState(false);
+  const [modalFarina, setModalFarina] = useState(false);
 
   const projectDetails = {
     monti: {
@@ -470,12 +473,34 @@ export default function ESGEvraSite() {
               <h3 className="mt-2 font-semibold">{c.h}</h3>
               <p className="mt-2 text-sm text-sub">{c.p}</p>
 
+              {/* Only Monti gets the modal button */}
               {c.h === "Monti" && (
                 <button
+                  type="button"
                   onClick={() => setModalMonti(true)}
-                  className="mt-4 px-4 py-2 rounded-lg bg-brand text-black font-medium hover:opacity-90"
+                  className="mt-4 inline-flex items-center gap-2 rounded-xl border border-muted px-3 py-2 text-xs uppercase tracking-wide text-sub hover:bg-muted hover:text-text"
                 >
                   View Details
+                </button>
+              )}
+
+              {c.h === "Mare" && (
+                <button
+                  type="button"
+                  onClick={() => setModalMare(true)}
+                  className="mt-4 inline-flex items-center gap-2 rounded-xl border border-muted px-3 py-2 text-xs uppercase tracking-wide text-sub hover:bg-muted hover:text-text"
+                >
+                  View details
+                </button>
+              )}
+
+              {c.h === "Farina" && (
+                <button
+                  type="button"
+                  onClick={() => setModalFarina(true)}
+                  className="mt-4 inline-flex items-center gap-2 rounded-xl border border-muted px-3 py-2 text-xs uppercase tracking-wide text-sub hover:bg-muted hover:text-text"
+                >
+                  View details
                 </button>
               )}
             </div>
@@ -490,27 +515,138 @@ export default function ESGEvraSite() {
         title="Monti — Project Details"
       >
         <p className="text-sub">Menus, images, and visual assets for Monti.</p>
-
+        
+        {/* Menu link */}
         <h3 className="mt-4 font-semibold">Menu (PDF)</h3>
         <a
           className="underline text-brand"
-          href="/images/monti/menu-monti.png"
+          href="/images/monti/menu-monti.pdf"
           target="_blank"
+          rel="noneferrer"
         >
           Download Menu
         </a>
 
-        <h3 className="mt-4 font-semibold">Mise en Place</h3>
-        <div className="grid grid-cols-2 gap-4">
-          <img src="/images/monti/mise.png" className="rounded-xl" />
+        {/* Shared image style: same size for all */}
+        <h3 className="mt-6 font-semibold">Mise en Place</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <img src="/images/monti/mise.png" 
+            className="rounded-xl w-full aspect-[4/3] object-cover"
+            alt="Mise en place"
+          />
         </div>
 
-        <h3 className="mt-4 font-semibold">Uniforms</h3>
-        <img src="/images/monti/uniforms.jpg" className="rounded-xl w-full" />
+        <h3 className="mt-6 font-semibold">Uniforms</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+          <img src="/images/monti/uniforms.jpg" 
+            className="rounded-xl w-full aspect-[4/3] object-cover"
+            alt="Uniforms" 
+          />
 
-        <h3 className="mt-4 font-semibold">Interior Design</h3>
-        <div className="grid grid-cols-2 gap-4">
-          <img src="/images/monti/interior.png" className="rounded-xl" />
+        <h3 className="mt-6 font-semibold">Interior Design</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <img src="/images/monti/interior.png"
+            className="rounded-xl w-full aspect-[4/3] object-cover"
+            alt="Interior Design"
+          />
+        </div>
+      </Modal>
+
+      {/* Mare Modal */}
+      <Modal
+        open={modalMare}
+        onClose={() => setModalMare(false)}
+        title="Mare — Project Details"
+      >
+        <p className="text-sub">
+          Visual assets and documentation for Mare: menus, mise en place,
+          uniforms, and interior design for the seafood line.
+        </p>
+
+        <h3 className="mt-4 font-semibold">Menu (PDF)</h3>
+        <a
+          className="underline text-brand"
+          href="/images/mare/menu-mare.pdf"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Download Menu
+        </a>
+
+        <h3 className="mt-6 font-semibold">Mise en Place</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <img
+            src="/images/mare/mise.jpg"
+            className="rounded-xl w-full aspect-[4/3] object-cover"
+            alt="Mise en place"
+          />
+        </div>
+
+        <h3 className="mt-6 font-semibold">Uniforms</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <img
+            src="/images/mare/uniforms.jpg"
+            className="rounded-xl w-full aspect-[4/3] object-cover"
+            alt="Uniforms"
+          />
+        </div>
+
+        <h3 className="mt-6 font-semibold">Interior Design</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <img
+            src="/images/mare/interior.jpg"
+            className="rounded-xl w-full aspect-[4/3] object-cover"
+            alt="Interior Design"
+          />
+        </div>
+      </Modal>
+
+      {/* Farina Modal */}
+      <Modal
+        open={modalFarina}
+        onClose={() => setModalFarina(false)}
+        title="Farina — Project Details"
+      >
+        <p className="text-sub">
+          Visual assets and documentation for Farina: long-fermentation dough,
+          pasta line, uniforms, and interior design.
+        </p>
+
+        <h3 className="mt-4 font-semibold">Menu (PDF)</h3>
+        <a
+          className="underline text-brand"
+          href="/images/farina/menu-farina.pdf"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Download Menu
+        </a>
+
+        <h3 className="mt-6 font-semibold">Mise en Place</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <img
+            src="/images/farina/mise.jpg"
+            className="rounded-xl w-full aspect-[4/3] object-cover"
+            alt="Mise en place"
+          />
+        </div>
+
+        <h3 className="mt-6 font-semibold">Uniforms</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <img
+            src="/images/farina/uniforms.jpg"
+            className="rounded-xl w-full aspect-[4/3] object-cover"
+            alt="Uniforms"
+          />
+        </div>
+
+        <h3 className="mt-6 font-semibold">Interior Design</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <img
+            src="/images/farina/interior.jpg"
+            className="rounded-xl w-full aspect-[4/3] object-cover"
+            alt="Interior Design"
+          />
         </div>
       </Modal>
 
@@ -569,7 +705,7 @@ export default function ESGEvraSite() {
                 className="h-40 w-auto object-contain"
               />
               <span className="text-sm text-neutral-700">
-                 Monti — Wood-fire grilled meats for dinner; Gourmet sandwiches for lunch
+                 Monti — Wood-fire steakhouse by night; Gourmet sandwiches by day
               </span>
             </div>
 
@@ -581,7 +717,7 @@ export default function ESGEvraSite() {
                  className="h-40 w-auto object-contain"
               />
               <span className="text-sm text-neutral-700">
-                 Mare — Mediterranean seafood
+                 Mare — Mediterranean seafood with and an introduction to Japanese flavors
               </span>
              </div>
 
@@ -593,7 +729,7 @@ export default function ESGEvraSite() {
                  className="h-40 w-auto object-contain"
               />
               <span className="text-sm text-neutral-700">
-                 Farina — Slow-fermented pizza & pasta
+                 Farina — The best of slow-fermented pizza & pasta gastronomy
               </span>
              </div>
 
