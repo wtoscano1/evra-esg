@@ -966,54 +966,63 @@ function ProjectModal({ project, onClose }) {
   if (!project) return null;
 
   return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/60 px-4">
-      <div className="relative w-full max-w-3xl rounded-2xl bg-panel border border-muted shadow-soft max-h-[90vh] overflow-y-auto">
-        {/* Close button */}
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute right-3 top-3 rounded-full bg-black/40 text-sub hover:text-white px-2 py-1 text-xs"
+    <div
+      className="fixed inset-0 z-40 bg-black/80"
+      onClick={() => setOpenBrandModal(null)}
+    >
+      {/* This wrapper fills the screen AND is scrollable */}
+      <div className="h-full w-full overflow-y-auto flex justify-center">
+        {/* The card sits inside and stops the click from closing */}
+        <div
+          className="relative w-full max-w-4xl my-10 bg-panel rounded-3xl border border-muted p-4 sm:p-6"
+          onClick={(e) => e.stopPropagation()}
         >
-          ✕
-        </button>
+          {/* Close button */}
+          <button
+            onClick={() => setOpenBrandModal(null)}
+            className="absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full bg-black/40 text-sub hover:bg-black/60"
+            aria-label="Close gallery"
+          >
+            ×
+          </button>
 
-        <div className="p-6 space-y-4">
-          <div className="space-y-1">
-            <h3 className="text-2xl font-semibold text-[var(--text)]">
-              {project.title}
-            </h3>
-            {project.description && (
-              <p className="text-sm text-sub">{project.description}</p>
-            )}
+          {/* Title */}
+          <h3 className="text-lg font-semibold mb-4">
+            {openBrandModal === 'monti' && 'Monti — Gallery'}
+            {openBrandModal === 'mare' && 'Mare — Gallery'}
+            {openBrandModal === 'farina' && 'Farina — Gallery'}
+          </h3>
+
+          {/* Images grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {brandGalleries[openBrandModal].map((img, idx) => (
+              <figure
+                key={idx}
+                className="bg-muted/40 rounded-2xl overflow-hidden border border-muted"
+              >
+                <img
+                  src={img.src}
+                  alt={img.alt}
+                  className="w-full h-44 md:h-52 object-cover"
+                />
+                <figcaption className="px-3 py-2 text-xs text-sub">
+                  {img.caption}
+                </figcaption>
+              </figure>
+            ))}
           </div>
 
-          {project.menuUrl && (
-            <div>
+          {/* Optional menu download for Monti */}
+          {openBrandModal === 'monti' && (
+            <div className="mt-6">
               <a
-                href={project.menuUrl}
+                href="/deck/Monti_Menu.pdf" // adjust if your filename is different
+                className="inline-flex items-center gap-2 rounded-xl border border-muted px-4 py-2 text-sm text-sub hover:bg-muted/40"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-xl bg-[var(--brand)] text-black px-4 py-2 text-sm hover:opacity-90"
               >
-                Open Menu (PDF)
+                Download Menu
               </a>
-            </div>
-          )}
-
-          {project.images && project.images.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-              {project.images.map((src, idx) => (
-                <div
-                  key={idx}
-                  className="overflow-hidden rounded-xl border border-muted bg-muted"
-                >
-                  <img
-                    src={src}
-                    alt={`${project.title} visual ${idx + 1}`}
-                    className="h-32 w-full object-cover sm:h-40"
-                  />
-                </div>
-              ))}
             </div>
           )}
         </div>
