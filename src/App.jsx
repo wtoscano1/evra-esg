@@ -634,29 +634,29 @@ export default function ESGEvraSite() {
 
             try {
               const r = await fetch('/api/contact', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data),
-              });
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(data),
+                });
 
-              let j = {};
-              try {
-                j = await r.json();
-              } catch {
-                j = {};
-              }
+                let j = {};
+                try {
+                  j = await r.json();
+                } catch {
+                  j = {};
+                }
 
-              if (r.ok && j.ok) {
-                alert('Thank you. We will reply shortly.');
-                form.reset();
-              } else {
-                console.error('Contact form error:', r.status, j);
-                alert('Error sending message. Please try again.');
+                if (r.ok && j.ok) {
+                  alert('Thank you. We will reply shortly.');
+                  form.reset();
+                } else {
+                  console.error('Contact form error:', r.status, j);
+                  alert('Error: ' + (j.error || `HTTP ${r.status}`));
+                }
+              } catch (err) {
+                console.error('Contact form network error:', err);
+                alert('Network error. Please try again.');
               }
-            } catch (err) {
-              console.error('Contact form network error:', err);
-              alert('Network error. Please try again.');
-            }
           }}
           >
           <label className="block">
