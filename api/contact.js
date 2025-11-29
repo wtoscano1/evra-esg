@@ -1,58 +1,68 @@
-// api/contact.js  (ESM)
+// api/contact.js
 import nodemailer from 'nodemailer';
-
-function readJson(req) {
-  return new Promise((resolve, reject) => {
-    let data = '';
-    req.on('data', (c) => (data += c));
-    req.on('end', () => {
-      try { resolve(data ? JSON.parse(data) : {}); }
-      catch (e) { reject(e); }
-    });
-    req.on('error', reject);
-  });
-}
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    res.setHeader('Allow', ['POST']);
-    return res.status(405).json({ ok: false, error: 'Method not allowed' });
+    res.status(405).json({ ok: false, error: 'Method not allowed' });
+    return;
   }
 
   try {
-    const { name, email, message, honeypot } = await readJson(req);
+    const { name, email, message, subject } = req.body || {};
 
-    if (honeypot) return res.status(200).json({ ok: true }); // bot trap
     if (!name || !email || !message) {
-      return res.status(400).json({ ok: false, error: 'Missing fields' });
+      res.status(400).json({ ok: false, error: 'Missing fields' });
+      return;
     }
 
+    // Build transporter using Infomaniak SMTP
     const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: Number(process.env.SMTP_PORT || 465),
-      secure: String(process.env.SMTP_SECURE || 'true') === 'true',
-      auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
+      host: process.env.SMTP_HOST,          // mail.infomaniak.com
+      port: Number(process.env.SMTP_PORT),  // 587
+      secure: process.env.SMTP_SECURE === 'true', // false for 587/STARTTLS
+      auth: {
+        user: process.env.SMTP_USER,        // full email
+        pass: process.env.SMTP_PASS,        // mailbox password
+      },
     });
 
-    const to = process.env.MAIL_TO || process.env.SMTP_USER;
+    const toEmail = process.env.TO_EMAIL || process.env.SMTP_USER;
+
+    const mailSubject =
+      subject && subject.trim()
+        ? subject.trim()
+        : 'New message from ESG Evra website';
+
+    const textBody = `
+New message from ESG Evra website:
+
+Name: ${name}
+Email: ${email}
+
+Message:
+${message}
+`.trim();
+
+    const htmlBody = `
+      <p><strong>New message from ESG Evra website</strong></p>
+      <p><strong>Name:</strong> ${name}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Message:</strong></p>
+      <p>${message.replace(/\n/g, '<br/>')}</p>
+    `;
 
     await transporter.sendMail({
-      from: `"ESG Evra Site" <${process.env.SMTP_USER}>`,
-      to,
+      from: `"ESG Evra Website" <${process.env.FROM_EMAIL || process.env.SMTP_USER}>`,
+      to: toEmail,
       replyTo: email,
-      subject: `Website contact from ${name}`,
-      text: `Name: ${name}\nEmail: ${email}\n\n${message}`,
-      html: `
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <hr/>
-        <p>${String(message).replace(/\n/g, '<br/>')}</p>
-      `,
+      subject: mailSubject,
+      text: textBody,
+      html: htmlBody,
     });
 
-    return res.status(200).json({ ok: true });
+    res.status(200).json({ ok: true });
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({ ok: false, error: 'Email send failed' });
+    console.error('Contact API error:', err);
+    res.status(500).json({ ok: false, error: 'Email send failed' });
   }
 }

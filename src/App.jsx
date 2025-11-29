@@ -632,15 +632,31 @@ export default function ESGEvraSite() {
               honeypot: form.elements['company']?.value || '',  
             };
 
-            const r = await fetch('/api/contact', {
-             method: 'POST',
-             headers: { 'Content-Type': 'application/json' },
-             body: JSON.stringify(data),
-            });
+            try {
+              const r = await fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+              });
 
-            const j = await r.json();
-            if (j.ok) { alert('Thank you. We will reply shortly.'); form.reset(); }
-            else { alert('Error sending message. Please try again.'); }
+              let j = {};
+              try {
+                j = await r.json();
+              } catch {
+                j = {};
+              }
+
+              if (r.ok && j.ok) {
+                alert('Thank you. We will reply shortly.');
+                form.reset();
+              } else {
+                console.error('Contact form error:', r.status, j);
+                alert('Error sending message. Please try again.');
+              }
+            } catch (err) {
+              console.error('Contact form network error:', err);
+              alert('Network error. Please try again.');
+            }
           }}
           >
           <label className="block">
@@ -704,7 +720,7 @@ export default function ESGEvraSite() {
               <p><span className="font-medium">Contact:</span> info@esgevra.ch</p>
             </div>
             <div>
-              <p><span className="font-medium">Data Protection:</span> privacy@esgevra.ch</p>
+              <p><span className="font-medium">Data Protection:</span> privacy@esg-evra.ch</p>
               <p><span className="font-medium">Law:</span> GDPR (EU) & nFADP (CH)</p>
               <p><span className="font-medium">Hosting:</span> Vercel/Netlify</p>
               <p className="mt-2">Update with final legal details after incorporation.</p>
