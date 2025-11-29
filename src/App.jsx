@@ -97,7 +97,7 @@ export default function ESGEvraSite() {
         kicker: "ESG • Circular • Traceable",
         title: "ESG Evra",
         subtitle:
-          "Circular food systems: direct sourcing, traceability, and low-carbon logistics from acquistion to salt.",
+          "Circular food systems: direct sourcing, traceability, and low-carbon logistics from acquistion to sale.",
         cta1: "Request Deck",
         cta2: "Partner With Us",
       },
@@ -149,7 +149,7 @@ export default function ESGEvraSite() {
       },
       clients: {
         title: "Partners & Producers",
-        blurb: "Selected Italian producers and logistics partners supporting Geneva operations.",
+        blurb: "Selected Italian producers and logistics partners supporting Swiss operations.",
       },
       projects: {
         title: "Projects",
@@ -478,10 +478,23 @@ export default function ESGEvraSite() {
 
       {/* Partners / Clients */}
       <Section id="clients" title={t.clients.title} blurb={t.clients.blurb}>
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-          {Array.from({ length: 12 }).map((_, i) => (
-            <div key={i} className="h-12 rounded-xl bg-muted" aria-label="logo placeholder" />
-          ))}
+        <div className="max-w-4xl mx-auto">
+          <img
+            src="/docs/partners-producers.png"
+            alt="Partners & Producers"
+            className="w-full h-auto rounded-2xl border border-muted shadow-soft object-contain"
+          />
+
+          <div className="mt-4 text-center">
+            <a
+              href="/docs/partners-producers.png"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 rounded-xl border border-muted px-4 py-2 text-sm text-sub hover:bg-muted hover:text-text"
+            >
+              Download Map
+            </a>
+          </div>
         </div>
       </Section>
 
