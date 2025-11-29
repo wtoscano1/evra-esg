@@ -571,7 +571,7 @@ export default function ESGEvraSite() {
             <div className="hidden md:block h-px flex-1 bg-gradient-to-r from-neutral-200 to-transparent" />
           </div>
 
-          <p className="mt-2 text-neutral-700 max-w-3xl">
+          <p className="mt-2 text-sub max-w-3xl">
             Monti, Mare, and Farina operate as a unified circular system for sourcing, logistics, and traceability.
           </p>
 
@@ -584,7 +584,7 @@ export default function ESGEvraSite() {
                 alt="Monti Logo"
                 className="h-40 w-auto object-contain"
               />
-              <span className="text-sm text-neutral-700">
+              <span className="text-sm text-sub">
                  Monti — Wood-fire steakhouse by night; Gourmet sandwiches by day
               </span>
             </div>
@@ -596,7 +596,7 @@ export default function ESGEvraSite() {
                  alt="Mare Logo"
                  className="h-40 w-auto object-contain"
               />
-              <span className="text-sm text-neutral-700">
+              <span className="text-sm text-sub">
                  Mare — Mediterranean seafood with and an introduction to Japanese flavors
               </span>
              </div>
@@ -608,7 +608,7 @@ export default function ESGEvraSite() {
                  alt="Farina Logo"
                  className="h-40 w-auto object-contain"
               />
-              <span className="text-sm text-neutral-700">
+              <span className="text-sm text-sub">
                  Farina — The best of slow-fermented pizza & pasta gastronomy
               </span>
              </div>
