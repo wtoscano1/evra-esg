@@ -2,67 +2,56 @@
 import nodemailer from 'nodemailer';
 
 export default async function handler(req, res) {
+  // Only accept POST
   if (req.method !== 'POST') {
-    res.status(405).json({ ok: false, error: 'Method not allowed' });
-    return;
+    return res.status(405).json({ ok: false, error: 'Method not allowed' });
   }
 
   try {
-    const { name, email, message, subject } = req.body || {};
+    const { name, email, message, honeypot } = req.body || {};
 
-    if (!name || !email || !message) {
-      res.status(400).json({ ok: false, error: 'Missing fields' });
-      return;
+    // Simple spam honeypot: if this hidden field is filled, ignore
+    if (honeypot) {
+      return res.status(200).json({ ok: true });
     }
 
-    // Build transporter using Infomaniak SMTP
+    if (!name || !email || !message) {
+      return res.status(400).json({ ok: false, error: 'Missing fields' });
+    }
+
+    // Nodemailer SMTP transport using env vars from Vercel
     const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,          // mail.infomaniak.com
-      port: Number(process.env.SMTP_PORT),  // 587
-      secure: process.env.SMTP_SECURE === 'true', // false for 587/STARTTLS
+      host: process.env.SMTP_HOST,           // e.g. "mail.infomaniak.com"
+      port: Number(process.env.SMTP_PORT),   // e.g. 465 or 587
+      secure: Number(process.env.SMTP_PORT) === 465, // true for 465, false for 587
       auth: {
-        user: process.env.SMTP_USER,        // full email
-        pass: process.env.SMTP_PASS,        // mailbox password
-      },
+        user: process.env.SMTP_USER,         // full email, e.g. "wtoscano@esg-evra.ch"
+        pass: process.env.SMTP_PASS          // the mailbox password
+      }
     });
 
-    const toEmail = process.env.TO_EMAIL || process.env.SMTP_USER;
+    const toAddress = process.env.CONTACT_TO || 'wtoscano@esg-evra.ch';
 
-    const mailSubject =
-      subject && subject.trim()
-        ? subject.trim()
-        : 'New message from ESG Evra website';
-
-    const textBody = `
-New message from ESG Evra website:
-
-Name: ${name}
-Email: ${email}
-
-Message:
-${message}
-`.trim();
-
-    const htmlBody = `
-      <p><strong>New message from ESG Evra website</strong></p>
-      <p><strong>Name:</strong> ${name}</p>
-      <p><strong>Email:</strong> ${email}</p>
-      <p><strong>Message:</strong></p>
-      <p>${message.replace(/\n/g, '<br/>')}</p>
-    `;
-
-    await transporter.sendMail({
-      from: `"ESG Evra Website" <${process.env.FROM_EMAIL || process.env.SMTP_USER}>`,
-      to: toEmail,
+    const info = await transporter.sendMail({
+      from: `"ESG Evra Website" <${process.env.SMTP_USER}>`,
+      to: toAddress,
       replyTo: email,
-      subject: mailSubject,
-      text: textBody,
-      html: htmlBody,
+      subject: `New message from ${name}`,
+      text: `From: ${name} <${email}>\n\n${message}`,
+      html: `
+        <p><strong>From:</strong> ${name} &lt;${email}&gt;</p>
+        <p>${(message || '').replace(/\n/g, '<br>')}</p>
+      `
     });
 
-    res.status(200).json({ ok: true });
+    console.log('Mail sent:', info.messageId);
+
+    return res.status(200).json({ ok: true });
   } catch (err) {
-    console.error('Contact API error:', err);
-    res.status(500).json({ ok: false, error: 'Email send failed' });
+    console.error('Contact error:', err);
+    return res.status(500).json({
+      ok: false,
+      error: err.message || 'Server error'
+    });
   }
 }
