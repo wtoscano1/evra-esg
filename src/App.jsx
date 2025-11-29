@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Modal from "./components/Modal";
 
 export default function ESGEvraSite() {
   const [lang, setLang] = useState("en");
@@ -8,42 +7,67 @@ export default function ESGEvraSite() {
   const [docFilter, setDocFilter] = useState({ type: "ALL", lang: "ALL" });
   const [activeProject, setActiveProject] = useState(null);
 
-  const [modalMonti, setModalMonti] = useState(false);
-  const [modalMare, setModalMare] = useState(false);
-  const [modalFarina, setModalFarina] = useState(false);
-
   const projectDetails = {
     monti: {
-      title: "Monti – Wood-Fire Meats",
+      title: "Monti — Project Details",
       description:
-        "Monti is our flagship wood-fire meat concept in central Geneva, focusing on traceable Italian beef, long-aged cuts, and a compact, high-impact dining room.",
-      menuUrl: "/docs/monti-menu.pdf",
-      images: [
-        "/images/projects/monti-mise-en-place.jpg",
-        "/images/projects/monti-uniforms.jpg",
-        "/images/projects/monti-interior.jpg",
+        "Menus, images, and visual assets for Monti: wood-fire grill, uniforms, mise en place, and interior.",
+      menuHref: "/images/monti/menu-monti.pdf",
+      sections: [
+        {
+          title: "Mise en Place",
+          images: ["/images/monti/mise.png"],
+        },
+        {
+          title: "Uniforms",
+          images: ["/images/monti/uniforms.jpg"],
+        },
+        {
+          title: "Interior Design",
+          images: ["/images/monti/interior.png"],
+        },
       ],
-    },
+     },
+
     mare: {
-      title: "Mare – Mediterranean Seafood",
-      description:
-        "Mare is built around Italian and Mediterranean seafood with optimized cold-chain logistics and a raw bar designed for speed and precision.",
-      menuUrl: "/docs/mare-menu.pdf",
-      images: [
-        "/images/projects/mare-mise-en-place.jpg",
-        "/images/projects/mare-uniforms.jpg",
-        "/images/projects/mare-interior.jpg",
-      ],
+    title: "Mare — Project Details",
+    description:
+      "Visual assets and documentation for Mare: Mediterranean seafood mise en place, uniforms, and interior.",
+    menuHref: "/images/mare/menu-mare.pdf",
+    sections: [
+      {
+        title: "Mise en Place",
+        images: ["/images/mare/mise.jpg"],
+      },
+      {
+        title: "Uniforms",
+        images: ["/images/mare/uniforms.jpg"],
+      },
+      {
+        title: "Interior Design",
+        images: ["/images/mare/interior.jpg"],
+      },
+    ],
     },
+
     farina: {
-      title: "Farina – Slow-Rise Pizza & Pasta",
+      title: "Farina — Project Details",
       description:
-        "Farina focuses on slow-fermented doughs and single-origin Italian grains, with a menu designed to travel well for takeaway and delivery.",
-      menuUrl: "/docs/farina-menu.pdf",
-      images: [
-        "/images/projects/farina-mise-en-place.jpg",
-        "/images/projects/farina-uniforms.jpg",
-        "/images/projects/farina-interior.jpg",
+        "Visual assets and documentation for Farina: slow-fermented doughs, uniforms, and interior.",
+      menuHref: "/images/farina/menu-farina.pdf",
+      sections: [
+        {
+          title: "Mise en Place",
+          images: ["/images/farina/mise.jpg"],
+        },
+        {
+          title: "Uniforms",
+          images: ["/images/farina/uniforms.jpg"],
+        },
+        {
+          title: "Interior Design",
+          images: ["/images/farina/interior.jpg"],
+        },
       ],
     },
   };
@@ -473,31 +497,31 @@ export default function ESGEvraSite() {
               <h3 className="mt-2 font-semibold">{c.h}</h3>
               <p className="mt-2 text-sm text-sub">{c.p}</p>
 
-              {/* Only Monti gets the modal button */}
+              {/* One button per brand that uses the unified modal state */}
               {c.h === "Monti" && (
                 <button
                   type="button"
-                  onClick={() => setModalMonti(true)}
-                  className="mt-4 inline-flex items-center gap-2 rounded-xl border border-muted px-3 py-2 text-xs uppercase tracking-wide text-sub hover:bg-muted hover:text-text"
-                >
-                  View Details
-                </button>
-              )}
-
-              {c.h === "Mare" && (
-                <button
-                  type="button"
-                  onClick={() => setModalMare(true)}
+                  onClick={() => setActiveProject("monti")}
                   className="mt-4 inline-flex items-center gap-2 rounded-xl border border-muted px-3 py-2 text-xs uppercase tracking-wide text-sub hover:bg-muted hover:text-text"
                 >
                   View details
                 </button>
               )}
 
+              {c.h === "Mare" && (
+                <button
+                  type="button"
+                  onClick={() => setActiveProject("mare")}
+                  className="mt-4 inline-flex items-center gap-2 rounded-xl border border-muted px-3 py-2 text-xs uppercase tracking-wide text-sub hover:bg-muted hover:text-text"
+                >
+                  View details
+                </button>
+              )}
+      
               {c.h === "Farina" && (
                 <button
                   type="button"
-                  onClick={() => setModalFarina(true)}
+                  onClick={() => setActiveProject("farina")}
                   className="mt-4 inline-flex items-center gap-2 rounded-xl border border-muted px-3 py-2 text-xs uppercase tracking-wide text-sub hover:bg-muted hover:text-text"
                 >
                   View details
@@ -507,148 +531,6 @@ export default function ESGEvraSite() {
           ))}
         </div>
       </Section>
-      
-      {/* Monti Modal */}
-      <Modal
-        open={modalMonti}
-        onClose={() => setModalMonti(false)}
-        title="Monti — Project Details"
-      >
-        <p className="text-sub">Menus, images, and visual assets for Monti.</p>
-        
-        {/* Menu link */}
-        <h3 className="mt-4 font-semibold">Menu (PDF)</h3>
-        <a
-          className="underline text-brand"
-          href="/images/monti/menu-monti.pdf"
-          target="_blank"
-          rel="noneferrer"
-        >
-          Download Menu
-        </a>
-
-        {/* Shared image style: same size for all */}
-        <h3 className="mt-6 font-semibold">Mise en Place</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <img src="/images/monti/mise.png" 
-            className="rounded-xl w-full aspect-[4/3] object-cover"
-            alt="Mise en place"
-          />
-        </div>
-
-        <h3 className="mt-6 font-semibold">Uniforms</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
-          <img src="/images/monti/uniforms.jpg" 
-            className="rounded-xl w-full aspect-[4/3] object-cover"
-            alt="Uniforms" 
-          />
-
-        <h3 className="mt-6 font-semibold">Interior Design</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <img src="/images/monti/interior.png"
-            className="rounded-xl w-full aspect-[4/3] object-cover"
-            alt="Interior Design"
-          />
-        </div>
-      </Modal>
-
-      {/* Mare Modal */}
-      <Modal
-        open={modalMare}
-        onClose={() => setModalMare(false)}
-        title="Mare — Project Details"
-      >
-        <p className="text-sub">
-          Visual assets and documentation for Mare: menus, mise en place,
-          uniforms, and interior design for the seafood line.
-        </p>
-
-        <h3 className="mt-4 font-semibold">Menu (PDF)</h3>
-        <a
-          className="underline text-brand"
-          href="/images/mare/menu-mare.pdf"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Download Menu
-        </a>
-
-        <h3 className="mt-6 font-semibold">Mise en Place</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <img
-            src="/images/mare/mise.jpg"
-            className="rounded-xl w-full aspect-[4/3] object-cover"
-            alt="Mise en place"
-          />
-        </div>
-
-        <h3 className="mt-6 font-semibold">Uniforms</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <img
-            src="/images/mare/uniforms.jpg"
-            className="rounded-xl w-full aspect-[4/3] object-cover"
-            alt="Uniforms"
-          />
-        </div>
-
-        <h3 className="mt-6 font-semibold">Interior Design</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <img
-            src="/images/mare/interior.jpg"
-            className="rounded-xl w-full aspect-[4/3] object-cover"
-            alt="Interior Design"
-          />
-        </div>
-      </Modal>
-
-      {/* Farina Modal */}
-      <Modal
-        open={modalFarina}
-        onClose={() => setModalFarina(false)}
-        title="Farina — Project Details"
-      >
-        <p className="text-sub">
-          Visual assets and documentation for Farina: long-fermentation dough,
-          pasta line, uniforms, and interior design.
-        </p>
-
-        <h3 className="mt-4 font-semibold">Menu (PDF)</h3>
-        <a
-          className="underline text-brand"
-          href="/images/farina/menu-farina.pdf"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Download Menu
-        </a>
-
-        <h3 className="mt-6 font-semibold">Mise en Place</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <img
-            src="/images/farina/mise.jpg"
-            className="rounded-xl w-full aspect-[4/3] object-cover"
-            alt="Mise en place"
-          />
-        </div>
-
-        <h3 className="mt-6 font-semibold">Uniforms</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <img
-            src="/images/farina/uniforms.jpg"
-            className="rounded-xl w-full aspect-[4/3] object-cover"
-            alt="Uniforms"
-          />
-        </div>
-
-        <h3 className="mt-6 font-semibold">Interior Design</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <img
-            src="/images/farina/interior.jpg"
-            className="rounded-xl w-full aspect-[4/3] object-cover"
-            alt="Interior Design"
-          />
-        </div>
-      </Modal>
 
       {/* Expansion & KPIs */}
       <Section id="geo" title={t.geo.title}>
@@ -679,9 +561,7 @@ export default function ESGEvraSite() {
           <div className="text-xs text-sub">{filteredDocs.length} file(s)</div>
         </div>
         <div className="mt-6" />
-        <DocsTable files={filteredDocs} />
-      </Section>
-
+        <DocsTable files={filteredDocs} />      </Section>
 
       {/* Brands / Concepts */}
       <section id="brands" className="bg-[var(--bg)]">
@@ -869,6 +749,88 @@ function LangSwitcher({ lang, setLang }) {
   );
 }
 
+function ProjectModal({ project, onClose }) {
+  if (!project) return null;
+
+  return (
+    <div
+      className="fixed inset-0 z-40 flex items-center justify-center"
+      aria-modal="true"
+      role="dialog"
+    >
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 bg-black/70"
+        onClick={onClose}
+      />
+
+      {/* Modal container with scroll */}
+      <div className="relative z-10 max-h-[90vh] w-full max-w-4xl overflow-y-auto px-4 sm:px-0">
+        <div className="bg-panel border border-muted rounded-2xl shadow-soft">
+          {/* Header */}
+          <div className="flex items-start justify-between p-4 sm:p-6 border-b border-muted">
+            <div>
+              <p className="text-xs uppercase tracking-[0.25em] text-sub">
+                Project detail
+              </p>
+              <h2 className="mt-1 text-lg sm:text-xl font-semibold">
+                {project.title}
+              </h2>
+            </div>
+            <button
+              type="button"
+              onClick={onClose}
+              className="ml-4 text-sub hover:text-text text-xl leading-none"
+              aria-label="Close"
+            >
+              ×
+            </button>
+          </div>
+
+          {/* Body */}
+          <div className="p-4 sm:p-6 space-y-6">
+            {project.description && (
+              <p className="text-sm text-sub">{project.description}</p>
+            )}
+
+            {project.menuHref && (
+              <div>
+                <h3 className="font-semibold mb-1 text-sm">Menu (PDF)</h3>
+                <a
+                  href={project.menuHref}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1 text-sm underline text-brand"
+                >
+                  Download menu
+                </a>
+              </div>
+            )}
+
+            {project.sections?.map((section) => (
+              <div key={section.title}>
+                <h3 className="font-semibold text-sm mb-3">
+                  {section.title}
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {section.images.map((src) => (
+                    <img
+                      key={src}
+                      src={src}
+                      alt={`${project.title} – ${section.title}`}
+                      className="rounded-xl w-full aspect-[4/3] object-cover"
+                    />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Section({ id, title, blurb, children }) {
   return (
     <section id={id} className="bg-panel border-t border-b border-muted">
@@ -962,71 +924,3 @@ function DocsTable({ files }) {
   );
 }
 
-function ProjectModal({ project, onClose }) {
-  if (!project) return null;
-
-  return (
-    <div
-      className="fixed inset-0 z-40 bg-black/80"
-      onClick={() => setOpenBrandModal(null)}
-    >
-      {/* This wrapper fills the screen AND is scrollable */}
-      <div className="h-full w-full overflow-y-auto flex justify-center">
-        {/* The card sits inside and stops the click from closing */}
-        <div
-          className="relative w-full max-w-4xl my-10 bg-panel rounded-3xl border border-muted p-4 sm:p-6"
-          onClick={(e) => e.stopPropagation()}
-        >
-          {/* Close button */}
-          <button
-            onClick={() => setOpenBrandModal(null)}
-            className="absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full bg-black/40 text-sub hover:bg-black/60"
-            aria-label="Close gallery"
-          >
-            ×
-          </button>
-
-          {/* Title */}
-          <h3 className="text-lg font-semibold mb-4">
-            {openBrandModal === 'monti' && 'Monti — Gallery'}
-            {openBrandModal === 'mare' && 'Mare — Gallery'}
-            {openBrandModal === 'farina' && 'Farina — Gallery'}
-          </h3>
-
-          {/* Images grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {brandGalleries[openBrandModal].map((img, idx) => (
-              <figure
-                key={idx}
-                className="bg-muted/40 rounded-2xl overflow-hidden border border-muted"
-              >
-                <img
-                  src={img.src}
-                  alt={img.alt}
-                  className="w-full h-44 md:h-52 object-cover"
-                />
-                <figcaption className="px-3 py-2 text-xs text-sub">
-                  {img.caption}
-                </figcaption>
-              </figure>
-            ))}
-          </div>
-
-          {/* Optional menu download for Monti */}
-          {openBrandModal === 'monti' && (
-            <div className="mt-6">
-              <a
-                href="/deck/Monti_Menu.pdf" // adjust if your filename is different
-                className="inline-flex items-center gap-2 rounded-xl border border-muted px-4 py-2 text-sm text-sub hover:bg-muted/40"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Download Menu
-              </a>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
