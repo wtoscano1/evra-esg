@@ -333,9 +333,15 @@ export default function ESGEvraSite() {
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
           <a href="#" className="flex items-center gap-2">
-            <div className="h-6 w-6 rounded-lg" style={{ background: "var(--brand)" }} aria-hidden />
-            <span className="font-semibold tracking-tight">ESG Evra</span>
-          </a>
+      <div className="h-8 w-8 rounded-xl overflow-hidden bg-[var(--brand)] flex items-center justify-center">
+        <img
+          src="/images/brands/evra.png"
+          alt="EVRA logo"
+          className="h-full w-full object-cover"
+        />
+      </div>
+      <span className="font-semibold tracking-tight">ESG Evra</span>
+    </a>
 
           <nav className="hidden md:flex gap-6 text-sm uppercase tracking-wide text-sub">
             <a href="#documents" className="hover:text-[var(--text)]">Documents</a>
