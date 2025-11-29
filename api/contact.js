@@ -1,14 +1,14 @@
-// api/contact.js  (MUST be at project root: esg-evra/api/contact.js)
+// api/contact.js
+import nodemailer from 'nodemailer';
 
 export default async function handler(req, res) {
-  // Only allow POST from the form
   if (req.method !== 'POST') {
     res.status(405).json({ ok: false, error: 'Method not allowed' });
     return;
   }
 
   try {
-    const { name, email, message, subject = '' } = req.body || {};
+    const { name, email, message, honeypot } = req.body || {};
 
     // Basic validation
     if (!name || !email || !message) {
@@ -16,13 +16,44 @@ export default async function handler(req, res) {
       return;
     }
 
-    // For now: just log to Vercel function logs. No SMTP yet.
-    console.log('Contact form submission:', { name, email, subject, message });
+    // Honeypot (spam bot) – if filled, silently succeed without sending
+    if (honeypot) {
+      res.status(200).json({ ok: true });
+      return;
+    }
 
-    // If we got here, tell the front-end it worked
+    // Create SMTP transporter (Infomaniak)
+    const transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: Number(process.env.SMTP_PORT || 587),
+      secure: false, // STARTTLS on 587
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    });
+
+    const toAddress = process.env.SMTP_TO || process.env.SMTP_USER;
+
+    const mailOptions = {
+      from: `"ESG-Evra Website" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
+      to: toAddress,
+      replyTo: email,
+      subject: `New contact form message from ${name}`,
+      text: [
+        `Name: ${name}`,
+        `Email: ${email}`,
+        '',
+        'Message:',
+        message,
+      ].join('\n'),
+    };
+
+    await transporter.sendMail(mailOptions);
+
     res.status(200).json({ ok: true });
   } catch (err) {
-    console.error('Contact handler error:', err);
-    res.status(500).json({ ok: false, error: 'Server error' });
+    console.error('Contact API mail error:', err);
+    res.status(500).json({ ok: false, error: 'Mail error' });
   }
 }
